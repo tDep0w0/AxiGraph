@@ -3,11 +3,11 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 const initialState: {
   isOn: boolean;
   title: string;
-  indices: number[];
+  positions: number[];
 } = {
   isOn: false,
   title: "",
-  indices: [],
+  positions: [],
 };
 
 const resultPanelSlice = createSlice({
@@ -23,12 +23,12 @@ const resultPanelSlice = createSlice({
     setTitle: (state, action: PayloadAction<string>) => {
       state.title = action.payload;
     },
-    setIndices: (state, action: PayloadAction<number[]>) => {
-      state.indices = action.payload;
+    setPositions: (state, action: PayloadAction<number[]>) => {
+      state.positions = action.payload;
     },
   },
 });
 
-export const { openPanel, closePanel, setTitle, setIndices } =
+export const { openPanel, closePanel, setTitle, setPositions } =
   resultPanelSlice.actions;
 export default resultPanelSlice.reducer;

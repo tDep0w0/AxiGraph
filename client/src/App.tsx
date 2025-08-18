@@ -1,8 +1,3 @@
-import { CopilotPopup } from "@copilotkit/react-ui";
-import { useSearchGoogle } from "./hooks/useSearchGoogle";
-import { useCopilotState } from "./hooks//copilotkit/useCopilotState";
-import { useAction } from "./hooks//copilotkit/useAction";
-import { useInstruction } from "./hooks/copilotkit/useInstructions";
 import "@xyflow/react/dist/style.css";
 import { useEffect, useState } from "react";
 import {
@@ -14,50 +9,32 @@ import {
   type Edge,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import type { MindMapNode } from "./types/MindMapNode";
 import { layoutMindMapFromTree } from "./utils/layoutMindMapFromTree";
 import type { LinkNode } from "./types/LinkNode";
 import { nodeTypes } from "./types/nodeTypes";
 import ResultPanel from "./components/ResultPanel";
-import { useDispatch } from "react-redux";
-import { type AppDispatch } from "./state/store";
-import { setSearchResults } from "./state/dataSlice";
 import { usePanel } from "./hooks/usePanel";
+import { IoChatbubble } from "react-icons/io5";
+import Chat from "./components/Chat";
+import type { MindMapNode } from "./types/MindMapNode";
 
 function App() {
-  const [prompt, setPrompt] = useState("");
-  const { data, refetch } = useSearchGoogle(prompt);
-  const [displayData, setDisplayData] = useState<MindMapNode>();
-
-  const dispatch = useDispatch<AppDispatch>();
-
-  useCopilotState({
-    data,
-    currentData: displayData,
-  });
-  useAction({
-    fetchData: async () => {
-      await refetch();
-      dispatch(setSearchResults(data));
-    },
-    setData: setDisplayData,
-    setPrompt: setPrompt,
-  });
-  useInstruction();
-
   const { fitView } = useReactFlow();
   const [nodes, setNodes, onNodesChange] = useNodesState<LinkNode>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
 
   const { isOn, title, close, filteredResults } = usePanel();
 
+  const [chatVisible, setChatVisible] = useState(false);
+  const [tree, setTree] = useState<MindMapNode>();
+
   useEffect(() => {
-    const { nodes, edges } = layoutMindMapFromTree(displayData);
+    const { nodes, edges } = layoutMindMapFromTree(tree);
 
     setNodes(nodes.map((node) => ({ ...node, type: "mindMapNode" })));
     setEdges(edges);
     fitView();
-  }, [setNodes, setEdges, fitView, displayData, data, dispatch]);
+  }, [setEdges, setNodes, fitView, tree]);
 
   return (
     <>
@@ -84,15 +61,25 @@ function App() {
           <Background />
         </ReactFlow>
       </div>
-      <CopilotPopup
-        instructions={
-          "You are assisting the user as best as you can. Answer in the best way possible given the data you have."
-        }
-        labels={{
-          title: "Assistant",
-          initial: "Need any help?",
-        }}
-      />
+      <div className="fixed h-fit bottom-6 right-6 flex flex-col items-end space-y-5">
+        <Chat
+          className={`
+              ${
+                chatVisible
+                  ? "scale-x-100 w-[23vw] h-[70vh]"
+                  : "scale-0 w-0 h-0"
+              }
+              transition-all duration-200 origin-[calc(100%-27px)_100%]
+            `}
+          setData={(data) => setTree(data)}
+        />
+        <div
+          onClick={() => setChatVisible((prev) => !prev)}
+          className="rounded-4xl w-fit p-3 bg-white text-black cursor-pointer hover:rounded-2xl transition-all duration-200"
+        >
+          <IoChatbubble className="text-3xl" />
+        </div>
+      </div>
     </>
   );
 }
