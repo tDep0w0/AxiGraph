@@ -9,12 +9,11 @@ export const usePanel = () => {
   const title = useSelector((state: RootState) => state.panel.title);
   const close = () => dispatch(closePanel());
 
-  const indices = useSelector((state: RootState) => state.panel.indices);
+  const positions = useSelector((state: RootState) => state.panel.positions);
   const results = useSelector((state: RootState) => state.data.searchResults);
 
-  const zeroBasedIndices = indices.map((index) => index - 1);
   const filteredResults =
-    results?.filter((_, index) => zeroBasedIndices.includes(index)) ?? [];
+    results?.filter((result) => positions.includes(result.position)) ?? [];
 
   return { isOn, title, close, filteredResults };
 };

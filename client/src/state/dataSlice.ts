@@ -1,11 +1,10 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { SearchResult } from "../types/SearchResult";
-import { searchResults } from "../constants/searchResults";
 
 const initialState: {
   searchResults?: SearchResult[];
 } = {
-  searchResults: searchResults,
+  searchResults: [],
 };
 
 const dataSlice = createSlice({

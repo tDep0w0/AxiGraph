@@ -1,8 +1,8 @@
 export type MindMapNode = {
-  id: string;
+  id?: string;
   data?: {
     label: string;
-    indices?: number[];
+    positions?: number[];
   };
   children?: MindMapNode[];
 };

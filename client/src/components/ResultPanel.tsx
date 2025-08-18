@@ -35,15 +35,11 @@ const ResultPanel: React.FC<ResultPanelProps> = ({
             className="bg-[#232323] flex items-center space-x-7 p-5 rounded-xl"
           >
             <div className=" flex-1 space-y-2">
-              <div className="flex items-center space-x-2">
-                <img
-                  src={result.favicon}
-                  className="aspect-square w-6 rounded-full"
-                  alt="favicon"
-                />
-                <span>{result.source}</span>
-              </div>
-              <a href={result.link} target="_blank" rel="noopener noreferrer">
+              <a
+                href={result.patent_link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <h3 className="text-xl text-indigo-400 inline hover:underline">
                   {result.title}
                 </h3>
