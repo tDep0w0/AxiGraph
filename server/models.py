@@ -16,8 +16,11 @@ class MindMap(TypedDict):
 class SearchResult(TypedDict):
     position: int
     title: str
+    patent_link: str
     snippet: str
-    source: str
+    title_full: Optional[str]
+    abstract: Optional[str]
+    thumbnail: Optional[str]
 
 
 class ResultTemplate(TypedDict):
@@ -31,3 +34,8 @@ class AgentState(TypedDict):
     topic: Optional[str]
     search_result: Optional[list]
     clustered_result: Optional[MindMap]
+
+
+class PatentData(TypedDict):
+    title: str
+    abstract: str
