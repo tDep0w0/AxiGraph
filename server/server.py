@@ -8,10 +8,7 @@ from fastapi import FastAPI, Query
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from agent import tool_list, graph
-import serpapi
-import os
-
-client = serpapi.Client(api_key=os.getenv("SERPAPI_KEY"))
+from services.search import search
 
 app = FastAPI()
 
@@ -68,10 +65,5 @@ async def agent(message: str, checkpoint_id: Optional[str] = Query(None)):
 
 
 @app.get("/api/search")
-async def search(q: str = Query(...)):
-    results = client.search(q=q, engine="google_patents", num=40)
-    return results["organic_results"]
-
-
-if __name__ == "__main__":
-    pass
+async def search_api(q: str = Query(...)):
+    return search(q)

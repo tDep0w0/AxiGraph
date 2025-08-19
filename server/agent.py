@@ -8,15 +8,16 @@ from langchain_openai import ChatOpenAI
 from langchain_core.tools import tool, InjectedToolCallId
 from dotenv import load_dotenv
 import json
-import requests
 from utils.clean_json_string import clean_json_string
 from utils.get_cluster_prompt import get_cluster_prompt
 from filter_prompt import filter_prompt
 from utils.mindmap_format import mindmap_format
 from utils.filter_tree import filter_tree
 from utils.mindmap_cast import mindmap_cast
+from utils.get_search_result import get_search_result
 from models import ResultTemplate, AgentState, MindMap
 import math
+from services.search import search
 
 load_dotenv()
 
@@ -55,19 +56,17 @@ def clusterize(tree: ResultTemplate, results: list[dict], depth=0):
 
 
 @tool
-def update_data(
+async def fetch_data(
     topic: str,
     tool_call_id: Annotated[str, InjectedToolCallId],
 ) -> Command | str:
-    """Update the data based on a given concise topic"""
+    """Fetch new data based on a given topic"""
 
-    try:
-        response = requests.get("http://localhost:3000/api/search", params={"q": topic})
-        response.raise_for_status()
-        data = response.json()
+    print("Getting search result...")
 
-    except Exception as e:
-        return "Error: " + str(e)
+    data = await get_search_result(topic)
+
+    print("Search result received.")
 
     mapped_data = [
         {
@@ -102,7 +101,7 @@ def update_data(
 
 
 @tool
-def filter_data(
+async def filter_data(
     topic: str,
     is_filter_out: bool,
     state: Annotated[AgentState, InjectedState],
@@ -132,7 +131,7 @@ def filter_data(
 
     for idx, item in enumerate(mapped_data):
         print(idx)
-        response = filter_model.invoke(
+        response = await filter_model.ainvoke(
             [filter_prompt]
             + [HumanMessage(content=json.dumps(item) + f"topic: {topic}")]
         )
@@ -159,8 +158,8 @@ def filter_data(
     )
 
 
-tools = [update_data, filter_data]
-tool_list = ["update_data", "filter_data"]
+tools = [fetch_data, filter_data]
+tool_list = ["fetch_data", "filter_data"]
 
 model = ChatOpenAI(model="gpt-4o-mini", temperature=0).bind_tools(tools=tools)
 
@@ -192,6 +191,3 @@ graph_builder.add_conditional_edges("model", tools_router)
 graph_builder.add_edge("tool_node", "model")
 
 graph = graph_builder.compile(checkpointer=memory)
-
-if __name__ == "__main__":
-    pass
