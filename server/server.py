@@ -8,7 +8,7 @@ from fastapi import FastAPI, Query
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from agent import tool_list, graph
-from services.search import search
+from utils.get_search_result import get_search_result
 
 app = FastAPI()
 
@@ -66,4 +66,4 @@ async def agent(message: str, checkpoint_id: Optional[str] = Query(None)):
 
 @app.get("/api/search")
 async def search_api(q: str = Query(...)):
-    return search(q)
+    return await get_search_result(q)
