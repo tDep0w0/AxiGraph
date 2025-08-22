@@ -5,6 +5,7 @@ from langgraph.graph import add_messages
 class NodeData(TypedDict):
     label: str
     positions: list[int]
+    relevancy: Optional[int | float]
 
 
 class MindMap(TypedDict):
@@ -24,15 +25,16 @@ class SearchResult(TypedDict):
 
 
 class ResultTemplate(TypedDict):
-    label: str
+    label: Optional[str]
     positions: list[int]
+    relevancy: Optional[int | float]
     children: Optional[list["ResultTemplate"]]
 
 
 class AgentState(TypedDict):
     messages: Annotated[list, add_messages]
     topic: Optional[str]
-    search_result: Optional[list]
+    search_result: Optional[list[SearchResult]]
     clustered_result: Optional[MindMap]
 
 

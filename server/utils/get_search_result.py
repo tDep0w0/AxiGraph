@@ -4,6 +4,7 @@ from utils.get_info_from_html import get_info_from_html
 import asyncio
 import aiohttp
 from models import SearchResult
+from constants.cached_search_results import cached_search_result
 
 
 async def get_search_result(q: str) -> list[SearchResult]:
@@ -15,6 +16,7 @@ async def get_search_result(q: str) -> list[SearchResult]:
         htmls_coros = [fetch_html(session, url) for url in patent_links]
         htmls = await asyncio.gather(*htmls_coros)
 
+    print("Extracting info...")
     search_infos = [get_info_from_html(html_str) for html_str in htmls]
 
     return [
@@ -25,12 +27,13 @@ async def get_search_result(q: str) -> list[SearchResult]:
         }
         for result, patent_data in zip(raw_data, search_infos)
     ]
+    # return cached_search_result
 
 
 if __name__ == "__main__":
 
     async def main():
-        result = await get_search_result("car")
+        result = await get_search_result("machine learning")
         print(result)
 
     asyncio.run(main())

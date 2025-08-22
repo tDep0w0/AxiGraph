@@ -19,6 +19,7 @@ def mindmap_format(tree: MindMap) -> MindMap | None:
             data={
                 "label": tree["data"]["label"],
                 "positions": tree["data"]["positions"],
+                "relevancy": tree["data"]["relevancy"],
             },
             children=[],
         )
@@ -28,6 +29,7 @@ def mindmap_format(tree: MindMap) -> MindMap | None:
         data={
             "label": tree["data"]["label"],
             "positions": tree["data"]["positions"],
+            "relevancy": tree["data"]["relevancy"],
         },
         children=children,
     )

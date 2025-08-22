@@ -28,7 +28,13 @@ const ResultPanel: React.FC<ResultPanelProps> = ({
           className="text-white text-lg cursor-pointer hover:text-[#979797]"
         />
       </div>
-      <div className="overflow-auto flex-1 p-5 space-y-5">
+      <div
+        className="overflow-auto flex-1 p-5 space-y-5"
+        style={{
+          scrollbarColor: "gray transparent",
+          scrollbarWidth: "thin",
+        }}
+      >
         {results.map((result, i) => (
           <div
             key={i}

@@ -9,7 +9,7 @@ client = serpapi.Client(api_key=os.getenv("SERPAPI_KEY"))
 
 
 def search(q: str) -> list[SearchResult]:
-    results = client.search(q=q, engine="google_patents", num=30)
+    results = client.search(q=q, engine="google_patents", num=40)
     organic_results: list[SearchResult] = list(results["organic_results"])
 
     return [
