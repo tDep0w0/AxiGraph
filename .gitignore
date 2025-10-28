@@ -1,2 +1,50 @@
+# Ignore client node_modules
 client/node_modules/
+
+# Ignore any node_modules folders (catch nested packages)
+**/node_modules/
+
+# Ignore Python virtual environments in server and project-wide
 server/venv/
+server/.venv/
+venv/
+.venv/
+
+# Byte-compiled / cache
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyc
+
+# Environment files
+.env
+server/.env
+
+# Editor and OS files
+.DS_Store
+.vscode/
+.idea/
+
+# Test / typing caches
+.pytest_cache/
+.mypy_cache/
+
+# Coverage reports
+.coverage
+coverage/
+htmlcov/
+
+# Logs
+*.log
+
+# Build / output
+dist/
+build/
+client/dist/
+client/build/
+
+# Packaging
+pip-wheel-metadata/
+*.egg-info/
+.eggs/
+
