@@ -6,7 +6,7 @@ import { type AppDispatch } from "../state/store";
 import { openPanel, setPositions, setTitle } from "../state/resultPanelSlice";
 
 const MindMapNode: React.FC<NodeProps<LinkNode>> = ({
-  data: { label, relevancy, positions },
+  data: { label, positions },
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { fitView } = useReactFlow();
@@ -27,22 +27,12 @@ const MindMapNode: React.FC<NodeProps<LinkNode>> = ({
           duration: 200,
         });
       }}
-      className="group relative flex justify-center
+      className="relative flex justify-center
                 bg-[#1e1e1e] w-[150px] border-1 p-[10px]
                   text-white text-[12px] text-center
                   border-[#3c3c3c] rounded-md cursor-pointer 
                   hover:bg-[#2d2d2d] active:bg-[#424242]"
     >
-      <div
-        className="absolute flex justify-center 
-                  top-[-40px] w-[70%]
-                  px-2 py-1 scale-0
-                  rounded-md text-[16px] bg-[#4d4d4d]
-                  group-hover:scale-100 origin-bottom
-                  transition-all duration-75"
-      >
-        {relevancy}%
-      </div>
       <Handle type="target" position={Position.Left} />
       {label}
       <Handle type="source" position={Position.Right} />
