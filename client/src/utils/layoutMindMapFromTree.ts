@@ -21,7 +21,6 @@ export function layoutMindMapFromTree(rawTree?: MindMapNode): {
     data: {
       label: d.data?.data?.label ?? "",
       positions: d.data?.data?.positions ?? [],
-      relevancy: d.data?.data?.relevancy ?? -1,
     },
     type: "default",
   }));

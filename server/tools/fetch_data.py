@@ -10,8 +10,6 @@ from utils.get_search_result import get_search_result
 from utils.choose_k import choose_k
 from utils.label_cluster import label_cluster
 from utils.mindmap_cast import mindmap_cast
-from utils.add_relevance import add_relevance
-from utils.normalize_tree import normalize_tree
 from models import ResultTemplate, SearchResult, PatentData
 from collections import defaultdict
 from dotenv import load_dotenv
@@ -50,7 +48,6 @@ async def recursive_cluster(
         return ResultTemplate(
             label=await label_task,
             positions=positions,
-            relevancy=None,
             children=[],
         )
 
@@ -70,7 +67,6 @@ async def recursive_cluster(
     return ResultTemplate(
         label=await label_task,
         positions=positions,
-        relevancy=None,
         children=children,
     )
 
@@ -99,14 +95,8 @@ async def fetch_data(
     embeddings = normalize(unnormalized_embeddings)
 
     indexed_data = list(enumerate(data))
-    indexed_embeddings = [
-        (item.get("position"), embedding) for item, embedding in zip(data, embeddings)
-    ]
 
-    clustered_tree = await recursive_cluster(indexed_data, embeddings)
-
-    tree = add_relevance(clustered_tree, indexed_embeddings)
-    tree = normalize_tree(tree, 100)
+    tree = await recursive_cluster(indexed_data, embeddings)
 
     tree["label"] = topic.capitalize()
 
