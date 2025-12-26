@@ -6,7 +6,6 @@ def filter_tree(tree: MindMap, positions_set: set) -> MindMap:
         id=tree["id"],
         data={
             "label": tree["data"]["label"],
-            "relevancy": None,
             "positions": [p for p in tree["data"]["positions"] if p in positions_set],
         },
         children=[

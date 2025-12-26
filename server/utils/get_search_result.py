@@ -4,7 +4,6 @@ from utils.get_info_from_html import get_info_from_html
 import asyncio
 import aiohttp
 from models import SearchResult
-from constants.cached_search_results import cached_search_result
 
 
 async def get_search_result(q: str) -> list[SearchResult]:
@@ -27,7 +26,6 @@ async def get_search_result(q: str) -> list[SearchResult]:
         }
         for result, patent_data in zip(raw_data, search_infos)
     ]
-    # return cached_search_result
 
 
 if __name__ == "__main__":

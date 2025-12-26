@@ -8,7 +8,6 @@ def mindmap_cast(treeTemplate: ResultTemplate) -> MindMap:
         data={
             "label": treeTemplate["label"] or "",
             "positions": treeTemplate["positions"],
-            "relevancy": treeTemplate["relevancy"],
         },
         children=[mindmap_cast(child) for child in (treeTemplate["children"] or [])],
     )

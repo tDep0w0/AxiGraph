@@ -4,7 +4,7 @@ from langgraph.prebuilt import ToolNode
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 from models import AgentState
-from tools.fetch_data_embed import fetch_data
+from tools.fetch_data import fetch_data
 from tools.filter_data import filter_data
 
 load_dotenv()
