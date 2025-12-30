@@ -1,16 +1,16 @@
 from models import PatentData
-from constants.label_prompt import label_prompt
+from agent.prompts.label_prompt import label_prompt
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 from dotenv import load_dotenv
 
 load_dotenv()
 
-label_model = ChatOpenAI(model="gpt-4o-mini")
-
 
 async def label_cluster(data: list[PatentData]) -> str:
     """Create a short label for the cluster using LLM."""
+
+    label_model = ChatOpenAI(model="gpt-4o-mini")
 
     text_blocks = [
         f"- {patent.get("title", "No title")}: {patent.get("abstract", "No abstract")}"

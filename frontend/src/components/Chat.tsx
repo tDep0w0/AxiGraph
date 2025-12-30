@@ -3,8 +3,8 @@ import { IoSend } from "react-icons/io5";
 import HumanMessage from "./HumanMessage";
 import AIMessage from "./AIMessage";
 import { useDispatch } from "react-redux";
-import { type AppDispatch } from "../state/store";
-import { setSearchResults } from "../state/dataSlice";
+import { type AppDispatch } from "../store/store";
+import { setSearchResults } from "../store/dataSlice";
 
 const Chat: React.FC<{
   className?: string;

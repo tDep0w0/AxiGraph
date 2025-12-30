@@ -5,7 +5,7 @@ import App from "./App.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactFlowProvider } from "@xyflow/react";
 import { Provider } from "react-redux";
-import { store } from "./state/store.ts";
+import { store } from "./store/store.ts";
 
 const queryClient = new QueryClient();
 

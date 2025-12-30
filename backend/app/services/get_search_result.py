@@ -1,9 +1,9 @@
 from services.search import search
 from services.fetch_html import fetch_html
-from utils.get_info_from_html import get_info_from_html
+from services.get_info_from_html import get_info_from_html
+from models import SearchResult
 import asyncio
 import aiohttp
-from models import SearchResult
 
 
 async def get_search_result(q: str) -> list[SearchResult]:

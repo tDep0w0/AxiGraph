@@ -4,22 +4,7 @@ from langchain_core.messages import HumanMessage, AIMessageChunk
 import json
 from models import AgentState
 from uuid import uuid4
-from fastapi import FastAPI, Query
-from fastapi.responses import StreamingResponse
-from fastapi.middleware.cors import CORSMiddleware
-from agent import tool_list, graph
-from utils.get_search_result import get_search_result
-
-app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-    expose_headers=["Content-Type"],
-)
+from agent.graph import graph
 
 
 async def generate_events(message: str, checkpoint_id: Optional[str] = None):
@@ -47,23 +32,10 @@ async def generate_events(message: str, checkpoint_id: Optional[str] = None):
 
             yield f'data: {{"type": "content", "content": "{ai_content}"}}\n\n'
 
-        elif event_type == "on_tool_end" and event["name"] in tool_list:
+        elif event_type == "on_tool_end":
             output_command = cast(Command, event["data"].get("output"))
             state = cast(AgentState, output_command.update)
 
             yield f'data: {{"type": "results", "content": {{"search_results": {json.dumps(state['search_result'])}, "clustered_results": {json.dumps(state['clustered_result'])}}}}}\n\n'
 
     yield f'data: {{"type": "end"}}\n\n'
-
-
-@app.get("/api/agent/{message}")
-async def agent(message: str, checkpoint_id: Optional[str] = Query(None)):
-    return StreamingResponse(
-        generate_events(message, checkpoint_id),
-        media_type="text/event-stream",
-    )
-
-
-@app.get("/api/search")
-async def search_api(q: str = Query(...)):
-    return await get_search_result(q)

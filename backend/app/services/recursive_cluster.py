@@ -1,21 +1,9 @@
-from langchain_openai import OpenAIEmbeddings
-from langchain_core.tools import tool, InjectedToolCallId
-from langchain_core.messages import ToolMessage
-from langgraph.types import Command
-import numpy as np
-from typing import Annotated
-from sklearn.preprocessing import normalize
 from sklearn.cluster import KMeans
-from utils.get_search_result import get_search_result
-from utils.choose_k import choose_k
-from utils.label_cluster import label_cluster
-from utils.mindmap_cast import mindmap_cast
+from services.choose_k import choose_k
+from services.label_cluster import label_cluster
 from models import ResultTemplate, SearchResult, PatentData
 from collections import defaultdict
-from dotenv import load_dotenv
 import asyncio
-
-load_dotenv()
 
 
 async def recursive_cluster(
@@ -68,47 +56,4 @@ async def recursive_cluster(
         label=await label_task,
         positions=positions,
         children=children,
-    )
-
-
-@tool
-async def fetch_data(
-    topic: str,
-    tool_call_id: Annotated[str, InjectedToolCallId],
-) -> Command:
-    """Fetch new data based on a given topic"""
-
-    print("Getting search results...")
-
-    data = await get_search_result(topic)
-
-    print("Search results received.")
-
-    embed_model = OpenAIEmbeddings(model="text-embedding-3-large")
-
-    texts = [
-        f"{result.get('title_full') or result.get("title")}. {result.get('abstract') or result.get('snippet')}"
-        for result in data
-    ]
-
-    unnormalized_embeddings = np.array(await embed_model.aembed_documents(texts))
-    embeddings = normalize(unnormalized_embeddings)
-
-    indexed_data = list(enumerate(data))
-
-    tree = await recursive_cluster(indexed_data, embeddings)
-
-    tree["label"] = topic.capitalize()
-
-    mindmap = mindmap_cast(tree)
-
-    return Command(
-        update={
-            "messages": [
-                ToolMessage(f"Data updated successfully", tool_call_id=tool_call_id)
-            ],
-            "topic": topic,
-            "search_result": data,
-            "clustered_result": mindmap,
-        }
     )

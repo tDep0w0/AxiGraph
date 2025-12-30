@@ -1,5 +1,5 @@
 from lxml import html
-from utils.format_patent_title import format_patent_title
+from services.format_patent_title import format_patent_title
 from models import PatentData
 
 

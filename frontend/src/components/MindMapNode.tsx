@@ -2,8 +2,8 @@ import type React from "react";
 import type { LinkNode } from "../types/LinkNode";
 import { Handle, Position, useReactFlow, type NodeProps } from "@xyflow/react";
 import { useDispatch } from "react-redux";
-import { type AppDispatch } from "../state/store";
-import { openPanel, setPositions, setTitle } from "../state/resultPanelSlice";
+import { type AppDispatch } from "../store/store";
+import { openPanel, setPositions, setTitle } from "../store/resultPanelSlice";
 
 const MindMapNode: React.FC<NodeProps<LinkNode>> = ({
   data: { label, positions },

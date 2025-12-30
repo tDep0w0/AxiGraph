@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { type AppDispatch, type RootState } from "../state/store";
-import { closePanel } from "../state/resultPanelSlice";
+import { type AppDispatch, type RootState } from "../store/store";
+import { closePanel } from "../store/resultPanelSlice";
 
 export const usePanel = () => {
   const dispatch = useDispatch<AppDispatch>();
